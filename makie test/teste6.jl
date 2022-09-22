@@ -60,7 +60,8 @@ for i = 0:7
 end
 
 # 2D plane in 4D space
-# represented by two 4D vectors
+# represented by two 4D vectors and one point
+pc  = [0; 0; 0; 0]
 pv1 = [1; 1; 0; 1]
 pv2 = [0; 0; 1; 0]
 pv1 = pv1 ./ sqrt(sum(pv1.^2))
@@ -81,7 +82,10 @@ nv[[2,3,4],:] = nv[[2,3,4],:] + cross(pv1[[2,3,4],:][:], pv2[[2,3,4],:][:])
 nv = nv ./ sqrt(sum(nv.^2))
 
 # project the cube vertices on the normal
-proj_n = x = cube4d[:,1:end-1] * nv
+proj_n = zeros((size(cube4d)[1]))
+for i = 1:size(proj_n)[1]
+    proj_n[i] = (cube4d[i,1:end-1] - pc)' * nv
+end
 
 # moves the center of the cube to the origin
 cube4d =  cube4d * [1 0 0 0 -0.5; 
@@ -92,7 +96,7 @@ cube4d =  cube4d * [1 0 0 0 -0.5;
 
 # make the vertices look "bigger" the closer they are to the plane (the proj_n is lower)
 for i = 1:size(cube4d)[1]
-    amplification = (1.0 - proj_n[i]) + 0.5 
+    amplification =  1.0 / (1.0 + proj_n[i])
     for j = 1:size(cube4d)[2]-1
         cube4d[i,j] = cube4d[i,j] / (1 + amplification * (1 - cube4d[i,j] * nv[j]))
                                                          # amplification is applied only to the coordinate 
