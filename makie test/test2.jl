@@ -29,3 +29,4 @@ reset_limits!(ax)            # when displaying in a new window, the axis may be 
 ###################
 # more references
 # https://juliadatascience.io/datavisMakie_attributes
+# https://discourse.julialang.org/t/makie-is-there-an-easy-way-to-combine-several-figures-into-a-new-figure-without-re-plotting/64874/4
